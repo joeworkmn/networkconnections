@@ -9,7 +9,9 @@
 
     if (isset($_FILES['uploadedfile']['tmp_name'])) {
        $file = $_FILES['uploadedfile']['tmp_name'];
-       $infile = fopen($file, 'r');
+
+       makeHostsFile($file);
+       $infile = fopen("hosts.txt", 'r');
        $linecount = countlines($infile); // total number of lines in file.
        $linenum = 1; // line we're currently on.
 
@@ -60,6 +62,8 @@
                $rMac = strtoupper(trim($r['mac'])); // MAC from GLPI.
                $hIp = trim($h['ip']); // IP from dhcpd.conf.
                $rIp = trim($r['ip']); // IP from GLPI.
+               $netmask = "255.255.255.0";
+               $subnet = "172.24.22.0";
 
                if ($hName === $rName) {
                    $inDb = true;
@@ -68,8 +72,8 @@
                if ($hMac === $rMac) {
                    if ($hIp !== $rIp) {
                        // Update IP to match what is is dhcpd.conf
-                       $stmt = $db->prepare("UPDATE glpi_networkports SET ip = :ip WHERE mac = :mac");
-                       $stmt->execute(array('ip' => $hIp, 'mac' => $hMac));
+                       $stmt = $db->prepare("UPDATE glpi_networkports SET ip = :ip, netmask = :netmask, subnet = :subnet WHERE mac = :mac");
+                       $stmt->execute(array('ip' => $hIp, 'mac' => $hMac, 'netmask' => $netmask, 'subnet' => $subnet));
                        //echo "$hName, $hMac: dhcpd.conf ip = $hIp, GLPI ip = $rIp <br />";
                    }
                }
@@ -101,4 +105,34 @@
 
 	   return $linecount;
    }
+
+   /*
+    * Reads in the dhcpd.conf file and write to hosts.txt
+   */
+   function makeHostsFile($dhcpconf)
+   {
+      //$infile = fopen("dhcpd.conf.portl0cac", 'r');
+      $infile = fopen($dhcpconf, 'r');
+      $outfile = fopen("hosts.txt", 'w');
+      while($line = fgets($infile)) {
+         $line = trim($line);
+
+         $line = str_replace(";", "", $line);
+         $tokens = preg_split('/\s+/', $line);
+         if ($tokens[0] === "host") {
+
+            $host = $tokens[1];
+            $ip = $tokens[4];
+            $mac = $tokens[7];
+
+            fwrite($outfile, "$host, $ip, $mac\n");
+         
+         }
+      
+      }
+
+      fclose($infile);
+      fclose($outfile);
+   }
+
 ?>
