@@ -1,0 +1,1788 @@
+# dhcpd.conf
+#
+# Sample configuration file for ISC dhcpd
+#
+
+# option definitions common to all supported networks...
+# HCC: will defer to per-subnet definitions
+#option domain-name "HCC.hawaii.edu";
+#option domain-name-servers 128.171.3.13;
+
+#option subnet-mask 255.255.255.224;
+
+deny unknown-clients;
+#default-lease-time 86400;	#one day
+default-lease-time 10800;	#3 hours
+#max-lease-time 86400;		#one day
+max-lease-time 10800;		#3 hours
+deny bootp;			#bootp runs on port 67.
+authoritative;
+
+# HCC: req'd subnet declaration for external interface
+# subnet 166.122.2x.xxx netmask 255.255.255.xxx {
+#}
+
+# Private ISP subnet
+subnet 172.24.22.0 netmask 255.255.255.0 {
+  # HCC:  unregistered hosts get upper half of subnet 
+  #range 172.24.22.130 172.24.22.254; # not allowing unreg'd host so commented
+  option routers		172.24.22.1;
+  option subnet-mask		255.255.255.0;
+  option broadcast-address	172.24.22.255;
+  option domain-name		"hcc.no.cat";
+  # HCC: uh-related projects get uh name service, not hcc's (we ACL them)
+  #	 otherwise, use the dns forwarder on this machine (if there's one)
+  #option domain-name-servers	128.171.3.13, 128.171.1.1;
+  #option domain-name-servers	172.24.22.2;
+  option domain-name-servers	172.24.22.1;
+  #option domain-name-servers	166.122.23.130, 128.171.1.1;
+}
+
+# HCC: group registered mac addresses, define known hosts here
+group {
+#  NOTE: 172.24.22.10 is reserved for cisco WLC - lan controller interface
+#  host hostname { fixed-address x.x.x.x ; hardware ethernet x:x:x:x:x:x ;}
+
+#****************************************************************************************
+# NOTE: 172.24.22.10 and 172.24.22.11 are reserved for Cisco Wireless Lan Controllers	*
+# #1 and #2, respectively								*
+#****************************************************************************************
+ # TDS Laptops
+
+# Date Added: 2010-12-10 by rosea
+# Removal Date: 
+# Name: - Connie Balanay
+# UH Login: - cbalanay
+# Location: Building 7, Room 310
+# Hostname: - connie-laptop
+# Device Model: Latitude E6410
+# Operating System: -
+# Processor: - 
+# Memory: 
+# Hard Drive: 
+# Serial #: -
+# Hardware Address LAN: 00:26:b9:e9:7b:f0
+# Hardware Address WLAN: 70:f1:a1:e3:b8:71
+# UH Decal: -
+# 1st Support: -
+# Notes: - 
+#  host connie-laptop { fixed-address 172.24.22.11; hardware ethernet 70:f1:a1:e3:b8:71 ;}
+
+# Date Added: 2010-12-10 by rosea
+# Removal Date: 
+# Name: - Connie Balanay
+# UH Login: - cbalanay
+# Location: Building 7, Room 310
+# Hostname: - connie-netbook
+# Device Model: Latitude 2100
+# Operating System: -
+# Processor: - 
+# Memory: 
+# Hard Drive: 
+# Serial #: -
+# Hardware Address LAN: 00:26:b9:12:5a:a1
+# Hardware Address WLAN: 90:4c:e5:51:3a:fa
+# UH Decal: -
+# 1st Support: -
+# Notes: - 
+  host connie-netbook { fixed-address 172.24.22.12 ; hardware ethernet 90:4c:e5:51:3a:fa ;}
+
+# Date Added: 2010-12-10 by rosea
+# Name:  Francis Wong
+# UH Username/s: fwong
+# Device Name: Apple
+# Device Model: MacBook Pro 
+# Operating System:  Mac OS 10.6.4 (Snow Leopard)
+# Processor:  2.66 GHz Intel Core i7
+# Memory: 8GB
+# HD Capacity: 500GB
+# Serial #: W80243U2AGZ
+# Hardware (Ethernet) Address: c4:2c:03:0e:0d:91
+# Hardware (Airport) Address: 60:33:4b:04:46:ce
+# UH Decal if applicable:
+# HCC tech staff 1st Support: ITC geeks
+  host francis-laptop { fixed-address 172.24.22.13 ; hardware ethernet 60:33:4b:04:46:ce ;}
+
+
+  host  l503pxlte { fixed-address 172.24.22.14 ; hardware ethernet 00:0a:95:a4:e3:48 ;}
+  host l503pxltw { fixed-address 172.24.22.15 ; hardware ethernet 00:0a:95:f3:31:ad ;}
+  # Name:  ITC/PowerBook G4
+  # HCC Login: hccitc/Bill
+  # Location:  2-503
+  # Network Info (NAT/IP):  All NATs
+  # Computer Name: l503ixlt
+  # Computer:  Mac Powerbook G4
+  # Operating System:  OS 10 (PPC)
+  # Built-in Ethernet Hardware Address: 00:0a:95:a4:e3:48
+  # Airport Hardware Address:  00:0a:95:f3:31:ad
+  # 1st Support:  TDS
+
+  host  l503ixlte { fixed-address 172.24.22.16 ; hardware ethernet 00:16:cb:9b:22:f2 ;}
+  host  l503ixltw { fixed-address 172.24.22.17 ; hardware ethernet 00:17:f2:50:ef:c5  ;}
+  # Name: ITC Deptmental Support MacBook Pro
+  # HCC Login: hal
+  # Location: 2-503
+  # Network Info (NAT/IP):  All NATs
+  # Computer Name: l503ixlt
+  # Computer:  MacBook Pro 15"
+  # Operating System:  OS 10.4 (Intel)
+  # Processor:  2.16 GHz Intel Core Duo
+  # Memory:  1 GB
+  # Serial #:  W86410NNVWY
+  # Built-in Ethernet Hardware Address: 00:16:cb:9b:22:f2
+  # Airport Hardware Address: 00:17:f2:50:ef:c5
+  # Hard Drive:  100 GB
+  # 1st Support:  TDS
+
+
+  ##
+
+  # 101016 ccaraang for rosea 
+  # Name:  Rosemary Sumajit
+  # HCC Login:  rosea
+  # Location:  2-503
+  # Computer Name:  l503x601
+  # Computer:  MacBook Pro model 6,2
+  # Operating System:  OS X 10.6.3 (HCC standard)
+  # Processor:  2.4GHz Intel core i5
+  # Memory: 8GB
+  # Serial #:   W80242EZAGX
+  # Hardware Address:  c4:2c:03:13:f9:91
+  # Hardware Address (WiFi):  60:33:4b:04:31:d6
+  # Hard Drive:  500 GB
+  # UH Decal:
+  # 1st Support:  HCC Help Desk
+  host l503x601 { fixed-address 172.24.22.18 ; hardware ethernet 60:33:4b:04:31:d6 ; }
+
+  
+  # 110119 ccaraang for toka
+  # Name: Travis Oka
+  # UH Username: toka
+  # Location: 2-503
+  # Network Info (NAT/IP): onramp portlna-t1
+  # Computer Name: l503x603
+  # Computer:  MacBook Pro 15" (MacBookPro6,2) Spring 2010 model
+  # Operating System:  OS 10.6 (Intel), Windows 7 (Native and VM), Linuces
+  # Processor:  2.66 GHz Intel Core i7
+  # Memory:  8 GB
+  # Serial #: W81020W0AGX
+  # Built-in Ethernet Hardware Address: 10:9A:DD:58:80:00
+  # Airport Hardware Address: 10:9A:DD:B1:9C:08
+  # Hard Drive:  500 GB
+  # UH Decal:  TBD
+  # 1st Support:self...
+  host l503x603  { fixed-address 172.24.22.19; hardware ethernet 10:9A:DD:B1:9C:08 ;}
+  host l503x603wire  { fixed-address 172.24.22.20; hardware ethernet 10:9A:DD:58:80:00 ;}
+
+  # 110713 toka
+  # Name: Layne Katsumoto
+  # UH Username: 
+  # Location: 2-503
+  # Network Info (NAT/IP): 
+  # Computer Name: laynenetbook
+  # Computer:  ASUS Netbook
+  # Operating System:  Windows 7
+  # Processor:  
+  # Memory:  
+  # Serial #: 
+  # Built-in Ethernet Hardware Address: 
+  # Wireless Hardware Address: 1c:4b:d6:da:64:54
+  # Hard Drive: 
+  # UH Decal:  TBD
+  # 1st Support:self...
+  host laynenetbook { fixed-address 172.24.22.21; hardware ethernet 1c:4b:d6:da:64:54 ;}
+
+
+
+
+
+
+
+ # Altiris server (appren lab altiris server win 2k)
+  host aplbas2k { fixed-address 172.24.22.100; hardware ethernet 00:d0:b7:79:db:a7 ;}
+ # 40 Laptops for Apprenticeship/Assessment
+ # Mobile Classroom Apprenticeship Wireless interface (mcappw)
+ # wireless addr range 172.24.22.101-120 and 172.24.22.21-40
+ # built-in eth addr range 172.24.22.41-80
+  host mcappwxp01 { fixed-address 172.24.22.101; hardware ethernet 00:16:cf:14:56:b6 ;}
+  host mcappwxp02 { fixed-address 172.24.22.102; hardware ethernet 00:16:cf:14:5a:3f ;}
+  host mcappwxp03 { fixed-address 172.24.22.103; hardware ethernet 00:16:cf:14:5d:74 ;}
+  host mcappwxp04 { fixed-address 172.24.22.104; hardware ethernet 00:16:cf:14:5f:20 ;}
+  host mcappwxp05 { fixed-address 172.24.22.105; hardware ethernet 00:16:cf:14:51:0f ;}
+  host mcappwxp06 { fixed-address 172.24.22.106; hardware ethernet 00:16:cf:14:5d:7a ;}
+  host mcappwxp07 { fixed-address 172.24.22.107; hardware ethernet 00:16:cf:14:5d:8c ;}
+  host mcappwxp08 { fixed-address 172.24.22.108; hardware ethernet 00:16:cf:14:51:f9 ;}
+  host mcappwxp09 { fixed-address 172.24.22.109; hardware ethernet 00:16:cf:14:51:7f ;}
+  host mcappwxp10 { fixed-address 172.24.22.110; hardware ethernet 00:16:cf:14:51:49 ;}
+  host mcappwxp11 { fixed-address 172.24.22.111; hardware ethernet 00:16:cf:14:58:8a ;}
+  host mcappwxp12 { fixed-address 172.24.22.112; hardware ethernet 00:16:cf:14:52:74 ;}
+  host mcappwxp13 { fixed-address 172.24.22.113; hardware ethernet 00:16:cf:14:51:79 ;}
+  host mcappwxp14 { fixed-address 172.24.22.114; hardware ethernet 00:16:cf:14:56:ec ;}
+  host mcappwxp15 { fixed-address 172.24.22.115; hardware ethernet 00:16:cf:14:51:23 ;}
+  host mcappwxp16 { fixed-address 172.24.22.116; hardware ethernet 00:16:cf:14:52:0b ;}
+  host mcappwxp17 { fixed-address 172.24.22.117; hardware ethernet 00:16:cf:14:5a:47 ;}
+  host mcappwxp18 { fixed-address 172.24.22.118; hardware ethernet 00:16:cf:14:52:d3 ;}
+  host mcappwxp19 { fixed-address 172.24.22.119; hardware ethernet 00:16:cf:14:59:91 ;}
+  host mcappwxp20 { fixed-address 172.24.22.120; hardware ethernet 00:16:cf:14:56:e6 ;}
+  host mcappwxp21 { fixed-address 172.24.22.21; hardware ethernet 00:16:cf:14:52:be ;}
+  host mcappwxp22 { fixed-address 172.24.22.22; hardware ethernet 00:16:cf:14:5e:fe ;}
+  host mcappwxp23 { fixed-address 172.24.22.23; hardware ethernet 00:16:cf:14:51:e1 ;}
+  host mcappwxp24 { fixed-address 172.24.22.24; hardware ethernet 00:16:cf:14:52:de ;}
+  host mcappwxp25 { fixed-address 172.24.22.25; hardware ethernet 00:16:cf:14:5a:67 ;}
+  host mcappwxp26 { fixed-address 172.24.22.26; hardware ethernet 00:16:cf:14:5a:69 ;}
+  host mcappwxp27 { fixed-address 172.24.22.27; hardware ethernet 00:16:cf:14:52:ba ;}
+  host mcappwxp28 { fixed-address 172.24.22.28; hardware ethernet 00:16:cf:14:52:64 ;}
+  host mcappwxp29 { fixed-address 172.24.22.29; hardware ethernet 00:16:cf:14:52:c4 ;}
+  host mcappwxp30 { fixed-address 172.24.22.30; hardware ethernet 00:16:cf:14:51:5d ;}
+  host mcappwxp31 { fixed-address 172.24.22.31; hardware ethernet 00:16:cf:14:52:62 ;}
+  host mcappwxp32 { fixed-address 172.24.22.32; hardware ethernet 00:16:cf:14:52:17 ;}
+  host mcappwxp33 { fixed-address 172.24.22.33; hardware ethernet 00:16:cf:14:51:0e ;}
+  host mcappwxp34 { fixed-address 172.24.22.34; hardware ethernet 00:16:cf:14:51:31 ;}
+  host mcappwxp35 { fixed-address 172.24.22.35; hardware ethernet 00:16:cf:14:5a:63 ;}
+  host mcappwxp36 { fixed-address 172.24.22.36; hardware ethernet 00:16:cf:14:52:0f ;}
+  host mcappwxp37 { fixed-address 172.24.22.37; hardware ethernet 00:16:cf:14:52:a2 ;}
+  host mcappwxp38 { fixed-address 172.24.22.38; hardware ethernet 00:16:cf:14:5a:6b ;}
+  host mcappwxp39 { fixed-address 172.24.22.39; hardware ethernet 00:16:cf:14:51:71 ;}
+  host mcappwxp40 { fixed-address 172.24.22.40; hardware ethernet 00:16:cf:14:51:f1 ;}
+
+ # 110124 toka Disabling the following IP range.  
+ # Reassigning to Adminitrative Justice.
+ #   
+ # Mobile Classroom Apprenticeship built-in Etherent interface (mcappe)
+ # wireless addr range 172.24.22.101-120 and 172.24.22.21-40
+ # built-in eth addr range 172.24.22.41-80
+ # host mcappexp01 { fixed-address 172.24.22.41; hardware ethernet 00:15:c5:46:8f:f2 ;}
+ # host mcappexp02 { fixed-address 172.24.22.42; hardware ethernet 00:15:c5:46:90:69 ;}
+ # host mcappexp03 { fixed-address 172.24.22.43; hardware ethernet 00:15:c5:38:f9:6e ;}
+ # host mcappexp04 { fixed-address 172.24.22.44; hardware ethernet 00:15:c5:47:af:c1 ;}
+ # host mcappexp05 { fixed-address 172.24.22.45; hardware ethernet 00:15:c5:47:2d:de ;}
+ # host mcappexp06 { fixed-address 172.24.22.46; hardware ethernet 00:15:c5:46:90:7a ;}
+ # host mcappexp07 { fixed-address 172.24.22.47; hardware ethernet 00:15:c5:46:dc:6c ;}
+ # host mcappexp08 { fixed-address 172.24.22.48; hardware ethernet 00:15:c5:3e:48:17 ;}
+ # host mcappexp09 { fixed-address 172.24.22.49; hardware ethernet 00:15:c5:47:5f:15 ;}
+ # host mcappexp10 { fixed-address 172.24.22.50; hardware ethernet 00:15:c5:47:af:db ;}
+ # host mcappexp11 { fixed-address 172.24.22.51; hardware ethernet 00:15:c5:46:8f:ca ;}
+ # host mcappexp12 { fixed-address 172.24.22.52; hardware ethernet 00:15:c5:47:4c:d9 ;}
+ # host mcappexp13 { fixed-address 172.24.22.53; hardware ethernet 00:15:c5:46:dc:7e ;}
+ # host mcappexp14 { fixed-address 172.24.22.54; hardware ethernet 00:15:c5:46:87:53 ;}
+ # host mcappexp15 { fixed-address 172.24.22.55; hardware ethernet 00:15:c5:47:2e:0a ;}
+ # host mcappexp16 { fixed-address 172.24.22.56; hardware ethernet 00:15:c5:47:2e:5f ;}
+ # host mcappexp17 { fixed-address 172.24.22.57; hardware ethernet 00:15:c5:46:8f:b3 ;}
+ # host mcappexp18 { fixed-address 172.24.22.58; hardware ethernet 00:15:c5:3e:33:3a ;}
+ # host mcappexp19 { fixed-address 172.24.22.59; hardware ethernet 00:15:c5:46:8f:ee ;}
+ # host mcappexp20 { fixed-address 172.24.22.60; hardware ethernet 00:15:c5:47:af:fa ;}
+ # host mcappexp21 { fixed-address 172.24.22.61; hardware ethernet 00:15:c5:3e:6f:21 ;}
+ # host mcappexp22 { fixed-address 172.24.22.62; hardware ethernet 00:15:c5:47:b0:04 ;}
+ # host mcappexp23 { fixed-address 172.24.22.63; hardware ethernet 00:15:c5:47:56:63 ;}
+ # host mcappexp24 { fixed-address 172.24.22.64; hardware ethernet 00:15:c5:47:bd:16 ;}
+ # host mcappexp25 { fixed-address 172.24.22.65; hardware ethernet 00:15:c5:46:dc:a3 ;}
+ # host mcappexp26 { fixed-address 172.24.22.66; hardware ethernet 00:15:c5:3e:66:5b ;}
+ # host mcappexp27 { fixed-address 172.24.22.67; hardware ethernet 00:15:c5:47:b5:eb ;}
+ # host mcappexp28 { fixed-address 172.24.22.68; hardware ethernet 00:15:c5:47:08:c9 ;}
+ # host mcappexp29 { fixed-address 172.24.22.69; hardware ethernet 00:15:c5:3e:de:ab ;}
+ # host mcappexp30 { fixed-address 172.24.22.70; hardware ethernet 00:15:c5:3c:1d:5e ;}
+ # host mcappexp31 { fixed-address 172.24.22.71; hardware ethernet 00:15:c5:47:af:6c ;}
+ # host mcappexp32 { fixed-address 172.24.22.72; hardware ethernet 00:15:c5:3e:32:9f ;}
+ # host mcappexp33 { fixed-address 172.24.22.73; hardware ethernet 00:15:c5:47:2d:c5 ;}
+ # host mcappexp34 { fixed-address 172.24.22.74; hardware ethernet 00:15:c5:47:bd:1c ;}
+ # host mcappexp35 { fixed-address 172.24.22.75; hardware ethernet 00:15:c5:46:8f:bd ;}
+ # host mcappexp36 { fixed-address 172.24.22.76; hardware ethernet 00:15:c5:46:dc:96 ;}
+ # host mcappexp37 { fixed-address 172.24.22.77; hardware ethernet 00:15:c5:46:8f:9c ;}
+ # host mcappexp38 { fixed-address 172.24.22.78; hardware ethernet 00:15:c5:3e:6f:36 ;}
+ # host mcappexp39 { fixed-address 172.24.22.79; hardware ethernet 00:15:c5:47:60:d4 ;}
+ # host mcappexp40 { fixed-address 172.24.22.80; hardware ethernet 00:15:c5:47:2e:dd ;}
+
+ # 110124 toka 
+ # Mobile Classroom Administrative Justice Wireless Etherent interface ()
+ # wireless addr range 172.24.22.41-65
+  host b521w701 { fixed-address 172.24.22.41; hardware ethernet 00:23:14:DC:43:F4 ;}
+  host b521w702 { fixed-address 172.24.22.42; hardware ethernet 00:23:14:DC:A7:88 ;}
+  host b521w703 { fixed-address 172.24.22.43; hardware ethernet 00:23:14:DC:A0:48 ;}
+  host b521w704 { fixed-address 172.24.22.44; hardware ethernet 00:23:14:DC:FA:FC ;}
+  host b521w705 { fixed-address 172.24.22.45; hardware ethernet 00:23:14:D1:3D:8C ;}
+  host b521w706 { fixed-address 172.24.22.46; hardware ethernet 00:23:14:DD:CE:FC ;}
+  host b521w707 { fixed-address 172.24.22.47; hardware ethernet 00:23:14:DC:67:8C ;}
+  host b521w708 { fixed-address 172.24.22.48; hardware ethernet 00:23:14:DC:A9:D4 ;}
+  host b521w709 { fixed-address 172.24.22.49; hardware ethernet 00:23:14:DC:95:7C ;}
+  host b521w710 { fixed-address 172.24.22.50; hardware ethernet 00:23:14:D0:7C:80 ;}
+  host b521w711 { fixed-address 172.24.22.51; hardware ethernet 00:23:14:DC:A7:A4 ;}
+  host b521w712 { fixed-address 172.24.22.52; hardware ethernet 00:23:14:DC:E9:58 ;}
+  host b521w713 { fixed-address 172.24.22.53; hardware ethernet 00:23:14:DC:67:78 ;}
+  host b521w714 { fixed-address 172.24.22.54; hardware ethernet 00:23:14:DC:44:94 ;}
+  host b521w715 { fixed-address 172.24.22.55; hardware ethernet 00:23:14:DD:DB:68 ;}
+  host b521w716 { fixed-address 172.24.22.56; hardware ethernet 00:23:14:A4:5A:DC ;}
+  host b521w717 { fixed-address 172.24.22.57; hardware ethernet 00:23:14:D0:49:E8 ;}
+  host b521w718 { fixed-address 172.24.22.58; hardware ethernet 00:23:14:DC:AC:38 ;}
+  host b521w719 { fixed-address 172.24.22.59; hardware ethernet 00:23:14:DC:D9:20 ;}
+  host b521w720 { fixed-address 172.24.22.60; hardware ethernet 00:23:14:DC:F0:AC ;}
+  host b521w721 { fixed-address 172.24.22.61; hardware ethernet 00:23:14:D0:96:A0 ;}
+  host b521w722 { fixed-address 172.24.22.62; hardware ethernet 00:23:14:DC:45:84 ;}
+  host b521w723 { fixed-address 172.24.22.63; hardware ethernet 00:23:14:DC:44:A4 ;}
+  host b521w724 { fixed-address 172.24.22.64; hardware ethernet 00:23:14:DC:FA:00 ;}
+  host b521rtr  { fixed-address 172.24.22.65; hardware ethernet 00:13:46:c9:b5:25 ;}
+  host b521w7xx { fixed-address 172.24.22.66; hardware ethernet 00:23:14:DC:E1:68 ;}
+
+
+
+}
+
+# 100614 rs for fwong
+# METC lab machines
+# wireless addr range 172.24.22.81-172.24.22.92, 172.24.22.94
+
+# Name:
+# HCC Login:
+# Location:  METC Lab
+# Network Info (NAT/IP): Mobile Classroom (hccmwc)
+# Computer Name:  Metc01
+# Computer:  Optiplex 745
+# Operating System:  XP Pro
+# Processor:  Intel Core 2 Duo CPU 6700 @2.66 GHZ
+# Memory:  3 GB
+# Serial #:  DM4S0F1
+# Hardware Address (WiFi):  00:1c:10:e5:27:25
+# Hard Drive:  80 GB
+# UH Decal:  136138
+  host metc01 { fixed-address 172.24.22.81; hardware ethernet 00:1c:10:e5:27:25 ;}
+
+# Name:
+# HCC Login:
+# Location:  METC Lab
+# Network Info (NAT/IP):  Mobile Classroom (hccmwc)
+# Computer Name:  Metc02
+# Computer:  Optiplex 745
+# Operating System:  XP Pro
+# Processor:  Intel Core 2 Duo CPU 6700 @2.66 GHZ
+# Memory:  3 GB
+# Serial #:  DL4S0F1
+# Hardware Address (WiFi):  00:1c:10:e5:26:24
+# Hard Drive:  80 GB
+# UH Decal:  136137
+  host metc02 { fixed-address 172.24.22.82; hardware ethernet 00:1c:10:e5:26:24 ;}
+
+# Name:
+# HCC Login:
+# Location:  METC Lab
+# Network Info (NAT/IP):  Mobile Classroom (hccmwc)
+# Computer Name:  Metc03
+# Computer:  Optiplex 745
+# Operating System:  XP Pro
+# Processor:  Intel Core 2 Duo CPU 6700 @2.66 GHZ
+# Memory:  3 GB
+# Serial #:  GL4S0F1
+# Hardware Address (WiFi):  00:1c:10:e5:27:24
+# Hard Drive:  80 GB
+# UH Decal:  136139
+  host metc03 { fixed-address 172.24.22.83; hardware ethernet 00:1c:10:e5:27:24 ;}
+
+# Name:
+# HCC Login:
+# Location:  METC Lab
+# Network Info (NAT/IP):  Mobile Classroom (hccmwc)
+# Computer Name:  Metc04
+# Computer:  Optiplex 745
+# Operating System:  XP Pro
+# Processor:  Intel Core 2 Duo CPU 6700 @2.66 GHZ
+# Memory:  3 GB
+# Serial #:  7N4S0F1
+# Hardware Address (WiFi):  00:1c:10:e5:22:48
+# Hard Drive:  80 GB
+# UH Decal:  136133
+  host metc04 { fixed-address 172.24.22.84; hardware ethernet 00:1c:10:e5:22:48 ;}
+
+# Name:
+# HCC Login:
+# Location:  METC Lab
+# Network Info (NAT/IP):  Mobile Classroom (hccmwc)
+# Computer Name:  Metc05
+# Computer:  Optiplex 745
+# Operating System:  XP Pro
+# Processor:  Intel Core 2 Duo CPU 6700 @2.66 GHZ
+# Memory:  3 GB
+# Serial #:  DM4S0F1
+# Hardware Address (WiFi):  00:1c:10:e5:27:97
+# Hard Drive:  80 GB
+# UH Decal:  136134
+  host metc05 { fixed-address 172.24.22.85; hardware ethernet 00:1c:10:e5:27:97 ;}
+
+# Name:
+# HCC Login:
+# Location:  METC Lab
+# Network Info (NAT/IP):  Mobile Classroom (hccmwc)
+# Computer Name:  Metc06
+# Computer:  Optiplex 745
+# Operating System:  XP Pro
+# Processor:  Intel Core 2 Duo CPU 6700 @2.66 GHZ
+# Memory:  3 GB
+# Serial #:  9L4S0F1
+# Hardware Address (WiFi):  00:1c:10:e5:27:22
+# Hard Drive:  80 GB
+# UH Decal:  136135
+  host metc06 { fixed-address 172.24.22.86; hardware ethernet 00:1c:10:e5:27:22 ;}
+
+# Name:
+# HCC Login:
+# Location:  METC Lab
+# Network Info (NAT/IP):  Mobile Classroom (hccmwc)
+# Computer Name:  Metc07
+# Computer:  Optiplex 745
+# Operating System:  XP Pro
+# Processor:  Intel Core 2 Duo CPU 6700 @2.66 GHZ
+# Memory:  3 GB
+# Serial #:  GM4S0F1
+# Hardware Address (WiFi):  00:1c:10:e5:26:2f
+# Hard Drive:  80 GB
+# UH Decal:  136140
+  host metc07 { fixed-address 172.24.22.87; hardware ethernet 00:1c:10:e5:26:2f ;}
+
+# Name:
+# HCC Login:
+# Location:  METC Lab
+# Network Info (NAT/IP):  Mobile Classroom (hccmwc)
+# Computer Name:  Metc08
+# Computer:  Optiplex 745
+# Operating System:  XP Pro
+# Processor:  Intel Core 2 Duo CPU 6700 @2.66 GHZ
+# Memory:  3 GB
+# Serial #:  8M4S0F1
+# Hardware Address (WiFi):  00:1c:10:e5:26:50
+# Hard Drive:  80 GB
+# UH Decal:  136134
+  host metc08 { fixed-address 172.24.22.88; hardware ethernet 00:1c:10:e5:26:50 ;}
+
+# Name:
+# HCC Login:
+# Location: METC Lab
+# Network Info (NAT/IP):  Mobile Classroom (hccmwc)
+# Computer Name:  Metc09
+# Computer:  Optiplex 745
+# Operating System:  XP Pro
+# Processor:  Intel Core 2 Duo CPU 6700 @2.66 GHZ
+# Memory:  3 GB
+# Serial #:  2M4S0F1
+# Hardware Address (WiFi):  00:1c:10:e5:28:C7
+# Hard Drive:  80 GB
+# UH Decal:  136129
+  host metc09 { fixed-address 172.24.22.89; hardware ethernet 00:1c:10:e5:28:c7 ;}
+
+# Name:
+# HCC Login:
+# Location:  METC Lab
+# Network Info (NAT/IP):  Mobile Classroom (hccmwc)
+# Computer Name:  Metc10
+# Computer:  Optiplex 745
+# Operating System:  XP Pro
+# Processor:  Intel Core 2 Duo CPU 6700 @2.66 GHZ
+# Memory:  3 GB
+# Serial #:  5M4S0F1
+# Hardware Address (WiFi):  00:1c:10:e5:22:41
+# Hard Drive:  80 GB
+# UH Decal:  136131
+  host metc10 { fixed-address 172.24.22.90; hardware ethernet 00:1c:10:e5:22:41 ;}
+
+# Name:
+# HCC Login:
+# Location:  METC Lab
+# Network Info (NAT/IP):  Mobile Classroom (hccmwc)
+# Computer Name:  Metc11
+# Computer:  Optiplex 745
+# Operating System:  XP Pro
+# Processor:  Intel Core 2 Duo CPU 6700 @2.66 GHZ
+# Memory:  3 GB
+# Serial #:  2N4S0F1
+# Hardware Address (WiFi):  00:1c:10:e5:27:86
+# Hard Drive:  80 GB
+# UH Decal:  136130
+  host metc11 { fixed-address 172.24.22.91; hardware ethernet 00:1c:10:e5:27:86 ;}
+
+# Name:
+# HCC Login:
+# Location:  METC Lab
+# Network Info (NAT/IP):  Mobile Classroom (hccmwc)
+# Computer Name:  Metc12
+# Computer:  Optiplex 745
+# Operating System:  XP Pro
+# Processor:  Intel Core 2 Duo CPU 6700 @2.66 GHZ
+# Memory:  3 GB
+# Serial #:  JM4S0F1
+# Hardware Address (WiFi):  00:1c:10:e5:26:A1
+# Hard Drive:  80 GB
+# UH Decal:  136141
+  host metc12 { fixed-address 172.24.22.92; hardware ethernet 00:1c:10:e5:26:a1 ;}
+
+# 100623 rs
+# Name:  Chulee Grove
+# HCC Login:  chulee
+# Location:  9-4
+# Network Info (NAT/IP):  HCC Mobile Wireless Classroom
+# Computer Name:  s104ltxp02
+# Computer:  Dell Latitude 110L
+# Operating System:  Win XP Pro (HCC standard)
+# Processor:  Intel Celeron M @ 1.30 GHz
+# Memory:   768MB
+# Serial #:   BVTSH71
+# Hardware Address:  00:12:3f:03:89:5f
+# Hardware Address (WiFi):  00:0b:7d:23:6f:8c
+# Hard Drive:  60 GB
+# UH Decal:  120982
+# 1st Support:  TDS
+  host s104ltxp02 { fixed-address 172.24.22.93; hardware ethernet 00:0b:7d:23:6f:8c ;}
+
+
+#110414 toka
+# Name:
+# Location: METC
+# Computer Name: marine1
+  host marine1 { fixed-address 172.24.22.94; hardware ethernet 00:1c:10:e5:22:47 ;}
+
+
+
+
+ 
+
+
+
+
+# old hal mbpro for testing only 091207
+  #host mbp-old-hal { fixed-address 172.24.22.99; hardware ethernet 00:17:f2:50:ef:c5 ;}
+  host mbp-old-hal { fixed-address 172.24.22.99; hardware ethernet 00:0c:29:6c:80:a5 ;}
+
+# Note that 172.24.22.101-172.24.22.101-120 are reserved for Apprenticeship laptops.  See above.
+
+# 172.24.22.130->254 mainly for non gregarious type mobile instructional laptops
+
+# 091208 ccaraang for fwong
+# Name:  Cyndi Uyehara
+# HCC Login:  uyeharac
+# Location:  2-208
+# Network Info (NAT/IP):  Fac Hot Spot
+# Computer Name:  l208ltxp01
+# Computer:  Dell Latitude E6400
+# Operating System:  Win XP Pro (HCC standard)
+# Processor:  Intel Core 2 Duo P8400 @ 2.26 GHz
+# Memory:  2 GB
+# Serial #:  C5VWPJ1
+# Hardware Address:  00:24:e8:af:8c:e8
+# Hardware Address (Wireless):  00:25:56:49:d2:44
+# Hard Drive:  80 GB
+# UH Decal:  N/A
+# 1st Support:  TDS
+  host l208ltxp01 { fixed-address 172.24.22.130; hardware ethernet 00:25:56:49:d2:44 ;}
+
+
+# 091119 ccaraang per fwong
+# Name:  Cyndi Uyehara
+# HCC Login:  uyeharac
+# Location:  2-208
+# Network Info (NAT/IP):  Fac Hot Spot
+# Computer Name:  l208ltxp02
+# Computer:  Dell Latitude E6400
+# Operating System:  Win XP Pro (HCC standard)
+# Processor:  Intel Core 2 Duo P8400 @ 2.26 GHz
+# Memory:  2 GB
+# Serial #:  F6VWPJ1
+# Hardware Address:  00:24:e8:af:8c:cd
+# Hardware Address (Wireless):  00:25:56:49:cf:4a
+# Hard Drive:  80 GB
+# UH Decal:  N/A
+# 1st Support:  TDS 
+  host l208ltxp02 { fixed-address 172.24.22.131; hardware ethernet 00:25:56:49:cf:4a ;}
+
+
+# 091210 ccaraang per fwong
+# Name:  Cyndi Uyehara
+# HCC Login:  uyeharac
+# Location:  2-208
+# Network Info (NAT/IP):  Mobile Classroom NAT
+# Computer Name:  l208ltxp03
+# Computer:  Dell Latitude E6400
+# Operating System:  Win XP Pro (HCC standard)
+# Processor:  Intel Core 2 Duo P8400 @ 2.26 GHz
+# Memory:  2 GB
+# Serial #:  F6VWPJ1
+# Hardware Address:  00:24:e8:af:8c:4d
+# Hardware Address (Wireless):  00:25:56:3e:63:5a
+# Hard Drive:  80 GB
+# UH Decal:  N/A
+# 1st Support:  TDS 
+  host l208ltxp03 { fixed-address 172.24.22.132; hardware ethernet 00:25:56:3e:63:5a ;}
+
+
+# 091210 ccaraang per fwong
+# Name:  Cyndi Uyehara
+# HCC Login:  uyeharac
+# Location:  2-208
+# Network Info (NAT/IP):  Mobile Classroom NAT
+# Computer Name:  l208ltxp04
+# Computer:  Dell Latitude E6400
+# Operating System:  Win XP Pro (HCC standard)
+# Processor:  Intel Core 2 Duo P8400 @ 2.26 GHz
+# Memory:  2 GB
+# Serial #:  C7VWPJ1
+# Hardware Address:  00:24:e8:af:8c:c7
+# Hardware Address (Wireless):  00:25:56:49:cf:62
+# Hard Drive:  80 GB
+# UH Decal:  N/A
+# 1st Support:  TDS
+  host l208ltxp04 { fixed-address 172.24.22.133; hardware ethernet 00:25:56:49:cf:62 ;}
+
+# 091210 ccaraang per fwong
+# Name:  Cyndi Uyehara
+# HCC Login:  uyeharac
+# Location:  2-208
+# Network Info (NAT/IP):  Mobile Classroom NAT
+# Computer Name:  l208ltxp05
+# Computer:  Dell Latitude E6400
+# Operating System:  Win XP Pro (HCC standard)
+# Processor:  Intel Core 2 Duo P8400 @ 2.26 GHz
+# Memory:  2 GB
+# Serial #:  DKVWPJ1
+# Hardware Address:  00:24:e8:af:8c:d7
+# Hardware Address (Wireless):  00:25:56:49:c6:01
+# Hard Drive:  80 GB
+# UH Decal:  N/A
+# 1st Support:  TDS
+  host l208ltxp05 { fixed-address 172.24.22.134; hardware ethernet 00:25:56:49:c6:01 ;}
+
+# 091210 ccaraang per fwong
+# Name:  Cyndi Uyehara
+# HCC Login:  uyeharac
+# Location:  2-208
+# Network Info (NAT/IP):  Mobile Classroom NAT
+# Computer Name:  l208ltxp06
+# Computer:  Dell Latitude E6400
+# Operating System:  Win XP Pro (HCC standard)
+# Processor:  Intel Core 2 Duo P8400 @ 2.26 GHz
+# Memory:  2 GB
+# Serial #:  DHTWPJ1
+# Hardware Address:  00:24:e8:af:8c:3f
+# Hardware Address (Wireless):  00:25:56:3e:72:39
+# Hard Drive:  80 GB
+# UH Decal:  N/A
+# 1st Support:  TDS
+  host l208ltxp06 { fixed-address 172.24.22.135; hardware ethernet 00:25:56:3e:72:39 ;}
+
+
+# 100111 ccaraang for cbalanay
+# Name:  Connie Balanay
+# HCC Login:  connie
+# Location:  7-310
+# Network Info (NAT/IP):
+# Computer Name:   b310iMac
+# Computer:  iMac
+# Operating System:  OSX (HCC standard)
+# Processor:  2.66 GHz Intel Core 2 Duo
+# Memory:  2 GB
+# Serial #:  W8817267ZE3
+# Hardware Address (en0):  00:1f:f3:55:49:33
+# Hardware Address (Airport):  00:1f:5b:c4:d6:35
+# Hard Drive:  300 GB
+# UH Decal:  n/a
+# 1st Support:  TDS 
+  host b310iMac { fixed-address 172.24.22.136; hardware ethernet 00:1f:5b:c4:d6:35 ;}
+
+# 100824 rs for fwong: c103ltxp01-c103ltxp09
+# Name:  Paul Sherard
+# HCC Login:
+# Location:  5-103
+# Network Info (NAT/IP):  Mobile Classroom
+# Computer Name: c103ltxp01
+# Computer:  Dell Latitude E6410
+# Operating System:  Win XP Pro (HCC standard)
+# Processor:  Intel Core i5 CPU M20 @2.40 GHz
+# Memory:  4 GB
+# Serial #: 6F34TM1
+# Hardware Address(Ethernet): 00:26:b9:e6:be:f5
+# Hardware Address(Wireless): 78:e4:00:d3:db:5f
+# Hard Drive:  320 GB
+# UH Decal:  N/A
+# 1st Support:
+  host c103ltxp01 { fixed-address 172.24.22.137; hardware ethernet 78:e4:00:d3:db:5f ;}
+
+# Name:  Paul Sherard
+# HCC Login:
+# Location:  5-103
+# Network Info (NAT/IP):  Mobile Classroom
+# Computer Name: c103ltxp02
+# Computer:  Dell Latitude E6410
+# Operating System:  Win XP Pro (HCC standard)
+# Processor:  Intel Core i5 CPU M20 @2.40 GHz
+# Memory:  4 GB
+# Serial #: FTZ3TM1
+# Hardware Address(Ethernet): 00:26:b9:e6:be:fd
+# Hardware Address(Wireless): 78:e4:00:d3:d9:9f
+# Hard Drive:  320 GB
+# UH Decal:  N/A
+# 1st Support:
+  host c103ltxp02 { fixed-address 172.24.22.138; hardware ethernet 78:e4:00:d3:d9:9f ;}
+
+# Name:  Paul Sherard
+# HCC Login:
+# Location:  5-103
+# Network Info (NAT/IP):  Mobile Classroom
+# Computer Name: c103ltxp03
+# Computer:  Dell Latitude E6410
+# Operating System:  Win XP Pro (HCC standard)
+# Processor:  Intel Core i5 CPU M 520 @ 2.40 GHz
+# Memory:  4 GB
+# Serial #: 4004TM1
+# Hardware Address (Ethernet):  00:26:b9:e6:9f:1c
+# Hardware Address (Wireless):  78:e4:00:d3:d9:f5
+# Hard Drive:  160 GB
+# UH Decal:  N/A
+# 1st Support: ITC
+  host c103ltxp03 { fixed-address 172.24.22.139; hardware ethernet 78:e4:00:d3:d9:f5 ;}
+
+# Name:  Paul Sherard
+# HCC Login:
+# Location:  5-103
+# Network Info (NAT/IP):  Mobile Classroom
+# Computer Name: c103ltxp04
+# Computer:  Dell Latitude E6410
+# Operating System:  Win XP Pro (HCC standard)
+# Processor:  Intel Core i5 CPU M20 @2.40 GHz
+# Memory:  4 GB
+# Serial #: 8804TM1
+# Hardware Address(Ethernet): 00:26:b9:e5:fe:c0
+# Hardware Address(Wireless): 78:e4:00:d3:d9:af
+# Hard Drive:  320 GB
+# UH Decal:  N/A
+# 1st Support:
+  host c103ltxp04 { fixed-address 172.24.22.140; hardware ethernet 78:e4:00:d3:d9:af ;}
+
+# Name:  Paul Sherard
+# HCC Login:
+# Location:  5-103
+# Network Info (NAT/IP):  Mobile Classroom
+# Computer Name: c103ltxp05
+# Computer:  Dell Latitude E6410
+# Operating System:  Win XP Pro (HCC standard)
+# Processor:  Intel Core i5 CPU M20 @2.40 GHz
+# Memory:  4 GB
+# Serial #: FV24TM1
+# Hardware Address(Ethernet): 00:26:b9:e6:9f:b8
+# Hardware Address(Wireless): 78:e4:00:d3:e5:54
+# Hard Drive:  320 GB
+# UH Decal:  N/A
+# 1st Support:
+  host c103ltxp05 { fixed-address 172.24.22.141; hardware ethernet 78:e4:00:d3:e5:54 ;}
+
+# Name:  Paul Sherard
+# HCC Login:
+# Location:  5-103
+# Network Info (NAT/IP):  Mobile Classroom
+# Computer Name: c103ltxp06
+# Computer:  Dell Latitude E6410
+# Operating System:  Win XP Pro (HCC standard)
+# Processor:  Intel Core i5 CPU M20 @2.40 GHz
+# Memory:  4 GB
+# Serial #: 2114TM1
+# Hardware Address(Ethernet): 00:26:b9:e6:be:e4
+# Hardware Address(Wireless): 78:e4:00:d3:d9:9e
+# Hard Drive:  320 GB
+# UH Decal:  N/A
+# 1st Support:
+  host c103ltxp06 { fixed-address 172.24.22.142; hardware ethernet 78:e4:00:d3:d9:9e ;}
+
+# Name:  Paul Sherard
+# HCC Login:
+# Location:  5-103
+# Network Info (NAT/IP):  Mobile Classroom
+# Computer Name: c103ltxp07
+# Computer:  Dell Latitude E6410
+# Operating System:  Win XP Pro (HCC standard)
+# Processor:  Intel Core i5 CPU M20 @2.40 GHz
+# Memory:  4 GB
+# Serial #: 81Y3TM1
+# Hardware Address(Ethernet): 00:26:b9:e6:b8:b7
+# Hardware Address(Wireless): 78:e4:00:d3:d9:da
+# Hard Drive:  320 GB
+# UH Decal:  N/A
+# 1st Support:
+  host c103ltxp07 { fixed-address 172.24.22.143; hardware ethernet 78:e4:00:d3:d9:da ;}
+
+# Name:  Paul Sherard
+# HCC Login:
+# Location:  5-103
+# Network Info (NAT/IP):  Mobile Classroom
+# Computer Name: c103ltxp08
+# Computer:  Dell Latitude E6410
+# Operating System:  Win XP Pro (HCC standard)
+# Processor:  Intel Core i5 CPU M20 @2.40 GHz
+# Memory:  4 GB
+# Serial #: 2V24TM1
+# Hardware Address(Ethernet): 00:26:b9:e6:be:f7
+# Hardware Address(Wireless): 78:e4:00:d3:e5:f0
+# Hard Drive:  320 GB
+# UH Decal:  N/A
+# 1st Support:
+  host c103ltxp08 { fixed-address 172.24.22.144; hardware ethernet 78:e4:00:d3:e5:f0 ;}
+
+# Name:  Paul Sherard
+# HCC Login:
+# Location:  5-103
+# Network Info (NAT/IP):  Mobile Classroom
+# Computer Name: c103ltxp09
+# Computer:  Dell Latitude E6410
+# Operating System:  Win XP Pro (HCC standard)
+# Processor:  Intel Core i5 CPU M20 @2.40 GHz
+# Memory:  4 GB
+# Serial #: 3WX3TM1
+# Hardware Address(Ethernet): 00:26:b9:e6:bb:4d
+# Hardware Address(Wireless): 78:e4:00:d3:e1:eb
+# Hard Drive:  320 GB
+# UH Decal:  N/A
+# 1st Support: 
+  host c103ltxp09 { fixed-address 172.24.22.145; hardware ethernet 78:e4:00:d3:e1:eb ;}
+
+# 100920 rs for william, 42 math lab laptops, CSC->math reorg
+# Name:
+# HCC Login:
+# Location: 7-432
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b432ltxp01
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: GNJBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:7f:df
+# Hardware Address(Wireless): 70:f1:a1:e5:0e:5b
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b432ltxp01 { fixed-address 172.24.22.146; hardware ethernet 70:f1:a1:e5:0e:5b ;}
+
+# Name:
+# HCC Login:
+# Location: 7-432
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b432ltxp02
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: FOKBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:80:03
+# Hardware Address(Wireless): 70:f1:a1:e5:0d:d0
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b432ltxp02 { fixed-address 172.24.22.147; hardware ethernet 70:f1:a1:e5:0d:d0 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-432
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b432ltxp03
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: HZJBTM1
+# Hardware Address(Ethernet): 00:26:b9:d2:29:7f
+# Hardware Address(Wireless): 70:f1:a1:e5:0d:67
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b432ltxp03 { fixed-address 172.24.22.148; hardware ethernet 70:f1:a1:e5:0d:67 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-432
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b432ltxp04
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 5MJBTM1
+# Hardware Address(Ethernet): 00:26:b9:e6:c0:be
+# Hardware Address(Wireless): 70:f1:a1:e5:08:33
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b432ltxp04 { fixed-address 172.24.22.149; hardware ethernet 70:f1:a1:e5:08:33 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-432
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b432ltxp05
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: FFJBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:6f:36
+# Hardware Address(Wireless): 70:f1:a1:e5:10:cb
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b432ltxp05 { fixed-address 172.24.22.150; hardware ethernet 70:f1:a1:e5:10:cb ;}
+
+# Name:
+# HCC Login:
+# Location: 7-432
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b432ltxp06
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 5NJBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:6f:38
+# Hardware Address(Wireless): 70:f1:a1:e5:0d:88
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b432ltxp06 { fixed-address 172.24.22.151; hardware ethernet 70:f1:a1:e5:0d:88 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-432
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b432ltxp07
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 7VJBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:7f:c8
+# Hardware Address(Wireless): 70:f1:a1:e5:02:6f
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b432ltxp07 { fixed-address 172.24.22.152; hardware ethernet 70:f1:a1:e5:02:6f ;}
+
+# Name:
+# HCC Login:
+# Location: 7-432
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b432ltxp08
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: BNJBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:80:07
+# Hardware Address(Wireless): 70:f1:a1:e5:0e:63
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b432ltxp08 { fixed-address 172.24.22.153; hardware ethernet 70:f1:a1:e5:0e:63 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-432
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b432ltxp09
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 81KBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:7f:eb
+# Hardware Address(Wireless): 70:f1:a1:e5:0d:6a
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b432ltxp09 { fixed-address 172.24.22.154; hardware ethernet 70:f1:a1:e5:0d:6a ;}
+
+# Name:
+# HCC Login:
+# Location: 7-432
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b432ltxp10
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 1ZKBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:6f:62
+# Hardware Address(Wireless): 70:f1:a1:e4:ff:ce
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b432ltxp10 { fixed-address 172.24.22.155; hardware ethernet 70:f1:a1:e4:ff:ce ;}
+
+# Name:
+# HCC Login:
+# Location: 7-432
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b432ltxp11
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 2ZJBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:7f:f9
+# Hardware Address(Wireless): 70:f1:a1:e5:0e:66
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b432ltxp11 { fixed-address 172.24.22.156; hardware ethernet 70:f1:a1:e5:0e:66 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-432
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b432ltxp12
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 4ZJBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:7f:d0
+# Hardware Address(Wireless): 70:f1:a1:e5:0d:68
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b432ltxp12 { fixed-address 172.24.22.157; hardware ethernet 70:f1:a1:e5:0d:68 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-432
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b432ltxp13
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 6XJBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:6f:49
+# Hardware Address(Wireless): 70:f1:a1:e5:0e:5a
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b432ltxp13 { fixed-address 172.24.22.158; hardware ethernet 70:f1:a1:e5:0e:5a ;}
+
+# Name:
+# HCC Login:
+# Location: 7-432
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b432ltxp14
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: HKJBTM1
+# Hardware Address(Ethernet): 00:26:b9:e6:d3:08
+# Hardware Address(Wireless): 70:f1:a1:e5:02:6e
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b432ltxp14 { fixed-address 172.24.22.159; hardware ethernet 70:f1:a1:e5:02:6e ;}
+
+# Name:
+# HCC Login:
+# Location: 7-432
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b432ltxp15
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: J6KBTM1
+# Hardware Address(Ethernet): 00:26:b9:e6:c0:c7
+# Hardware Address(Wireless): 70:f1:a1:e5:0d:a0
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b432ltxp15 { fixed-address 172.24.22.160; hardware ethernet 70:f1:a1:e5:0d:a0 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-432
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b432ltxp16
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 28MBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:7f:f2
+# Hardware Address(Wireless): 70:f1:a1:e5:0d:60
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b432ltxp16 { fixed-address 172.24.22.161; hardware ethernet 70:f1:a1:e5:0d:60 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-432
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b432ltxp17
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: FLJBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:6f:55
+# Hardware Address(Wireless): 70:f1:a1:e5:0d:87
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b432ltxp17 { fixed-address 172.24.22.162; hardware ethernet 70:f1:a1:e5:0d:87 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-432
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b432ltxp18
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 6VJBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:80:0d
+# Hardware Address(Wireless): 70:f1:a1:e5:02:4d
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b432ltxp18 { fixed-address 172.24.22.163; hardware ethernet 70:f1:a1:e5:02:4d ;}
+
+# Name:
+# HCC Login:
+# Location: 7-432
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b432ltxp19
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 68NBTM1
+# Hardware Address(Ethernet): 00:26:b9:e8:73:42
+# Hardware Address(Wireless): 70:f1:a1:e5:0f:17
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b432ltxp19 { fixed-address 172.24.22.164; hardware ethernet 70:f1:a1:e5:0f:17 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-432
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b432ltxp20
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: CZKBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:7f:ac
+# Hardware Address(Wireless): 70:f1:a1:e5:08:32
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b432ltxp20 { fixed-address 172.24.22.165; hardware ethernet 70:f1:a1:e5:08:32 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-433
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b433ltxp21
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: GONBTM1
+# Hardware Address(Ethernet): 00:26:b9:e8:73:43
+# Hardware Address(Wireless): 70:f1:a1:e5:02:0a
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b433ltxp21 { fixed-address 172.24.22.166; hardware ethernet 70:f1:a1:e5:02:0a ;}
+
+# Name:
+# HCC Login:
+# Location: 7-433
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b433ltxp22
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: B9KBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:7f:f1
+# Hardware Address(Wireless): 70:f1:a1:e5:0f:bf
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b433ltxp22 { fixed-address 172.24.22.167; hardware ethernet 70:f1:a1:e5:0f:bf ;}
+
+# Name:
+# HCC Login:
+# Location: 7-433
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b433ltxp23
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 1JJBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:6f:5e
+# Hardware Address(Wireless): 70:f1:a1:e5:0d:7a
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b433ltxp23 { fixed-address 172.24.22.168; hardware ethernet 70:f1:a1:e5:0d:7a ;}
+
+# Name:
+# HCC Login:
+# Location: 7-433
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b433ltxp24
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 3RMBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:77:20
+# Hardware Address(Wireless): 70:f1:a1:e5:02:7a
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b433ltxp24 { fixed-address 172.24.22.169; hardware ethernet 70:f1:a1:e5:02:7a ;}
+
+# Name:
+# HCC Login:
+# Location: 7-433
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b433ltxp25
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 39NBTM1
+# Hardware Address(Ethernet): 00:26:b9:e8:73:34
+# Hardware Address(Wireless): 70:f1:a1:e4:ff:b0
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b433ltxp25 { fixed-address 172.24.22.170; hardware ethernet 70:f1:a1:e4:ff:b0 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-433
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b433ltxp26
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: C6KBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:70:08
+# Hardware Address(Wireless): 70:f1:a1:e4:fe:e2
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b433ltxp26 { fixed-address 172.24.22.171; hardware ethernet 70:f1:a1:e4:fe:e2 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-433
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b433ltxp27
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 37MBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:70:11
+# Hardware Address(Wireless): 70:f1:a1:e4:fe:e1
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b433ltxp27 { fixed-address 172.24.22.172; hardware ethernet 70:f1:a1:e4:fe:e1 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-433
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b433ltxp28
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: DJJBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:c0:c6
+# Hardware Address(Wireless): 70:f1:a1:e5:02:8f
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b433ltxp28 { fixed-address 172.24.22.173; hardware ethernet 70:f1:a1:e5:02:8f ;}
+
+# Name:
+# HCC Login:
+# Location: 7-433
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b433ltxp29
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 21MBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:6f:e8
+# Hardware Address(Wireless): 70:f1:a1:e5:0d:a9
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b433ltxp29 { fixed-address 172.24.22.174; hardware ethernet 70:f1:a1:e5:0d:a9 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-433
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b433ltxp30
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 2SMBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:77:aa
+# Hardware Address(Wireless): 70:f1:a1:e4:ff:c9
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b433ltxp30 { fixed-address 172.24.22.175; hardware ethernet 70:f1:a1:e4:ff:c9 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-433
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b433ltxp31
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 3CNBTM1
+# Hardware Address(Ethernet): 00:26:b9:e8:73:25
+# Hardware Address(Wireless): 70:f1:a1:e4:ff:9c
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b433ltxp31 { fixed-address 172.24.22.176; hardware ethernet 70:f1:a1:e4:ff:9c ;}
+
+# Name:
+# HCC Login:
+# Location: 7-433
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b433ltxp32
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 3Q3BTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:7f:bd
+# Hardware Address(Wireless): 70:f1:a1:e3:b9:d4
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b433ltxp32 { fixed-address 172.24.22.177; hardware ethernet 70:f1:a1:e3:b9:d4 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-433
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b433ltxp33
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 74NBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:77:b6
+# Hardware Address(Wireless): 70:f1:a1:e4:fe:63
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b433ltxp33 { fixed-address 172.24.22.178; hardware ethernet 70:f1:a1:e4:fe:63 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-433
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b433ltxp34
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 1KJBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:6f:30
+# Hardware Address(Wireless): 70:f1:a1:e5:0e:64
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b433ltxp34 { fixed-address 172.24.22.179; hardware ethernet 70:f1:a1:e5:0e:64 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-433
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b433ltxp35
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: JLJBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:7f:d1
+# Hardware Address(Wireless): 70:f1:a1:e5:01:dd
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b433ltxp35 { fixed-address 172.24.22.180; hardware ethernet 70:f1:a1:e5:01:dd ;}
+
+# Name:
+# HCC Login:
+# Location: 7-433
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b433ltxp36
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 20LBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:7f:e9
+# Hardware Address(Wireless): 70:f1:a1:e4:fc:61
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b433ltxp36 { fixed-address 172.24.22.181; hardware ethernet 70:f1:a1:e4:fc:61 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-433
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b433ltxp37
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 28LBTM1
+# Hardware Address(Ethernet): 00:26:b9:e6:c0:c5
+# Hardware Address(Wireless): 70:f1:a1:e5:0f:1d
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b433ltxp37 { fixed-address 172.24.22.182; hardware ethernet 70:f1:a1:e5:0f:1d ;}
+
+# Name:
+# HCC Login:
+# Location: 7-433
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b433ltxp38
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: FMJBTM1
+# Hardware Address(Ethernet): 00:26:b9:e6:b3:19
+# Hardware Address(Wireless): 70:f1:a1:e5:01:ac
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b433ltxp38 { fixed-address 172.24.22.183; hardware ethernet 70:f1:a1:e5:01:ac ;}
+
+# Name:
+# HCC Login:
+# Location: 7-433
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b433ltxp39
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: GXKBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:6f:57
+# Hardware Address(Wireless): 70:f1:a1:e5:0f:1c
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b433ltxp39 { fixed-address 172.24.22.184; hardware ethernet 70:f1:a1:e5:0f:1c ;}
+
+# Name:
+# HCC Login:
+# Location: 7-433
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b433ltxp40
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 8MJBTM1
+# Hardware Address(Ethernet): 00:26:b9:bd:32:f8
+# Hardware Address(Wireless): 70:f1:a1:e5:02:78
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b433ltxp40 { fixed-address 172.24.22.185; hardware ethernet 70:f1:a1:e5:02:78 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-433
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b433ltxp41
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 8WJBTM1
+# Hardware Address(Ethernet): 00:26:b9:e6:c0:b7
+# Hardware Address(Wireless): 70:f1:a1:e5:0d:84
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b433ltxp41 { fixed-address 172.24.22.186; hardware ethernet 70:f1:a1:e5:0d:84 ;}
+
+# Name:
+# HCC Login:
+# Location: 7-433
+# Network Info (NAT/IP): hccmwc wireless NAT
+# Computer Name: b433ltxp42
+# Computer: Dell Latitude E6410
+# Operating System: Windows XP Pro. (HCC configuration)
+# Processor: Intel Dual Core i5 2.4GHz
+# Memory:  4.0GB
+# Serial #: 5DKBTM1
+# Hardware Address(Ethernet): 00:26:b9:e9:80:04
+# Hardware Address(Wireless): 70:f1:a1:e5:0d:82
+# Hard Drive: 160GB
+# UH Decal:
+# 1st Support:
+  host b433ltxp42 { fixed-address 172.24.22.187; hardware ethernet 70:f1:a1:e5:0d:82 ;}
+
+
+# 101007 rs for jay tablante
+# Name:  NHC Mobile Lab
+# Location:  Bldg 20, Rm 03
+# Network Info (NAT/IP): (STAFF WIFI)
+# Computer Name: kkwm00
+# Computer: Macmini3,1
+# Operating System: Mac OS X 10.5.8 (9L31a)
+# Processor: 2.0 GHz Intel Core 2 Duo
+# Memory: 2 GB RAM
+# Serial #: YM9310FA1BU
+# WIFI Hardware Address:  00:26:08:eb:ad:8f
+# Hard Drive: 111.79 GB
+# 1st Support: J Tablante/NHC
+  host kkwm00 { fixed-address 172.24.22.188; hardware ethernet 00:26:08:eb:ad:8f ;}
+
+# 101016 rs for fwong
+# Name:  Linda Buck
+# HCC Login:  bucklind
+# Location:  11-101
+# Network Info (NAT/IP):  HCCMWC
+# Computer Name:  w101ltw701
+# Computer:  Dell Latitude E6410
+# Operating System:  Windows 7 Pro (HCC standard)
+# Processor:  Intel Core i5 CPU M 520 @ 2.40 GHz
+# Memory:  4 GB
+# Serial #:
+# Hardware Address:  00:26:b9:e6:bb:65
+# Hardware Address (WiFi):  78:e4:00:d3:e1:e8
+# Hard Drive:  300 GB
+# UH Decal:  N/A
+# 1st Support:  TDS
+  host w101ltw701 { fixed-address 172.24.22.189; hardware ethernet 78:e4:00:d3:e1:e8 ;}
+
+# 101018 rs for z. nedbalek
+# Name:  Burton Chang
+# HCC Login:  burton
+# Location:  7-521
+# Network Info (NAT/IP):
+# Computer Name:  tinkerbell
+# Computer:    Cisco PIX-501
+# Operating System:    Firewall ver. 6.1
+# Processor:    Am5x86 133 MHz
+# Memory:    16 MB
+# Serial #:    806211412 (0x300dcf54)
+# Hardware Address:    00:09:7c:b4:04:8e
+# Hardware Address (WiFi):    N/A
+# Hard Drive:    N/A
+# UH Decal:  N/A
+# 1st Support:    Zane Nedbalek
+  host tinkerbell { fixed-address 172.24.22.190; hardware ethernet 00:09:7c:b4:04:8e ;}
+
+# 101110 rosea for fwong
+# Name:  Linda Buck
+# HCC Login:  bucklind
+# Location:  11-101
+# Network Info (NAT/IP):  HCCMWC
+# Computer Name:  w101ltw702
+# Computer:  Dell Latitude E6410
+# Operating System:  Windows 7 Pro (HCC standard)
+# Processor:  Intel Core i5 CPU M 520 @ 2.40 GHz
+# Memory:  4 GB
+# Serial #:  BTZ3TM1
+# Hardware Address:  00:26:b9:e5:48:9c
+# Hardware Address (WiFi):  78:e4:00:d3:d9:b0
+# Hard Drive:  300 GB
+# UH Decal:  N/A
+# 1st Support:  TDS 
+  host w101ltw702 { fixed-address 172.24.22.191; hardware ethernet 78:e4:00:d3:d9:b0 ;}
+
+# 101110 rosea for fwong
+# Name:  Linda Buck
+# HCC Login:  bucklind
+# Location:  11-101
+# Network Info (NAT/IP):  HCCMWC
+# Computer Name:  w101ltw703
+# Computer:  Dell Latitude E6410
+# Operating System:  Windows 7 Pro (HCC standard)
+# Processor:  Intel Core i5 CPU M 520 @ 2.40 GHz
+# Memory:  4 GB
+# Serial #:  BTZ3TM1
+# Hardware Address:  00:26:b9:e6:9f:a0
+# Hardware Address (WiFi):  78:e4:00:d3:d9:de
+# Hard Drive:  300 GB
+# UH Decal:  N/A
+# 1st Support:  TDS 
+  host w101ltw703 { fixed-address 172.24.22.192; hardware ethernet 78:e4:00:d3:d9:de ;}
+
+# 101118 rosea for fwong
+# Name:  Jeannie Shaw
+# HCC Login:  jeannie
+# Location:  Pearl Harbor
+# Network Info (NAT/IP):  HCCMWC
+# Computer Name:  phltw701
+# Computer:  Dell Latitude E6410
+# Operating System:  Windows 7 Pro (HCC standard)
+# Processor:  Intel Core i5 CPU M 520 @ 2.40 GHz
+# Memory:  4 GB
+# Serial #:  J5C0WM1
+# Hardware Address:  5c:26:0a:0c:d6:d7
+# Hardware Address (WiFi):  c0:cb:38:22:ec:18
+# Hard Drive:  150GB
+# UH Decal:  N/A
+# 1st Support:  TDS
+  host phltw701 { fixed-address 172.24.22.193; hardware ethernet c0:cb:38:22:ec:18 ;}
+
+# 101214 rosea for cbalanay
+# Name:  PACE (Cyndi Uyehara)
+# HCC Login:  pace
+# Location:  2-212A
+# Network Info (NAT/IP):  hccwmc
+# Computer Name(Mac):   l212altx601
+# Computer:  MacBook Pro
+# Operating System:  Mac OS X 10.6.5 (Snow Leopard)
+# Processor:  Intel Core 2 Duo @ 2.4 GHZ
+# Memory:  4 GB
+# Serial #:  W8036LSEATM
+# Hardware Address:  c4:2c:03:38:8d:f1
+# Hardware Address (Airport):  78:ca:39:b9:93:0f
+# Hard Drive:  250 GB
+# UH Decal:  N/A
+# 1st Support:  TDS
+  host l212altx601 { fixed-address 172.24.22.194; hardware ethernet 78:ca:39:b9:93:0f ;}
+
+
+# Name: PN Mobile Lab
+# HCC Login: -
+# Location: Building 20, Room 1
+# Network Info (NAT/IP): NHC Mobile NAT (hccmwc)
+# Computer Name: pnmacmini
+# Computer: Mac Mini
+# Operating System: Mac OSX Snow Leopard 10.6.6
+# Processor: 2.4 GHz Intel Core 2 Duo
+# Memory: 2 GB DDR3 SDRAM
+# Serial #: C07DG83DDD6H
+# Hardware Address: 60:33:4b:15:e5:07 
+# Hard Drive: 320 GB SATA
+# UH Decal: 
+# 1st Support: PN Tech
+  host pnmacmini { fixed-address 172.24.22.195; hardware ethernet 60:33:4b:15:e5:07 ;}
+
+# Name:  Classroom 5-106
+# HCC Login:
+# Location:  5-106
+# Network Info (NAT/IP):  hccwmc
+# Computer Name:  c106ltxp01
+# Computer:  Dell Inspiron 1501
+# Operating System:  Win Xp Pro (Hcc Standard)
+# Processor:  AMD Athlom 64 x2 Dual-Core Processor TK-53
+# Memory:  1 GB
+# Serial #:  5HJ5QD1
+# Hardware Address: 00:1c:23:90:55:cd
+# Hardware Address (WiFi):  00:1b:fc:ee:26:a6
+# Hard Drive:  80 GB
+# UH Decal:  N/A
+# 1st Support:
+  host c106ltxp01 { fixed-address 172.24.22.196; hardware ethernet 00:1b:fc:ee:26:a6 ;}
+
+
+# Name:  Classroom 5-106
+# HCC Login:
+# Location:  5-106
+# Network Info (NAT/IP):  hccwmc
+# Computer Name:  c106ltxp02
+# Computer:  Dell Inspiron 1501
+# Operating System:  Win Xp Pro (Hcc Standard)
+# Processor:  AMD Athlom 64 x2 Dual-Core Processor TK-53
+# Memory:  1 GB
+# Serial #:  GGJ5QD1
+# Hardware Address: 00:1c:23:90:56:d3
+# Hardware Address (WiFi):  00:1b:fc:ee:26:9d
+# Hard Drive:  80 GB
+# UH Decal:  N/A
+# 1st Support:
+  host c106ltxp02 { fixed-address 172.24.22.197; hardware ethernet 00:1b:fc:ee:26:9d ;}
+
+
+# Name:  Classroom 5-106
+# HCC Login:
+# Location:  5-106
+# Network Info (NAT/IP):  hccwmc
+# Computer Name:  c106ltxp03
+# Computer:  Dell Inspiron 1501
+# Operating System:  Win Xp Pro (Hcc Standard)
+# Processor:  AMD Athlom 64 x2 Dual-Core Processor TK-53
+# Memory:  1 GB
+# Serial #:  7HJ5QD1
+# Hardware Address: 00:1c:23:90:4a:58
+# Hardware Address (WiFi):  00:1b:fc:ee:22:33
+# Hard Drive:  80 GB
+# UH Decal:  N/A
+# 1st Support: 
+  host c106ltxp03 { fixed-address 172.24.22.198; hardware ethernet 00:1b:fc:ee:22:33 ;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Added Entry: 100129 ccaraang for ccaraang
+# Remove Entry: 110201
+# Personally-owned? no
+# Name: Aldrin Caraang
+# UH Username: ccaraang
+# Primary Location: 2-503
+# Network Info: mobile hotspot?
+# Device Name: l503delllattitude-buntu
+# Device Model: 2003 Dell Latitude c810 desktop replacement, formerly TDS
+# Operating System: Ubuntu Linux, Fedora Linux
+# Processor: Pentium 4 2.4Ghz
+# Memory: 1GB
+# HD Capacity: 60GB
+# Serial #:
+# Hardware Address wireless: 00:16:6f:c5:45:a5
+# Hardware Address wired: 00:08:74:3a:43:d7
+# UH Decal:
+# 1s Support: self
+  host l503dellbuntu2003 { fixed-address 172.24.22.252 ; hardware ethernet 00:16:6f:c5:45:a5 ;}
+
+
+#****************************************************************************************
+# NOTE: 172.24.22.10 and 172.24.22.11 are reserved for Cisco Wireless Lan Controllers	*
+# #1 and #2, respectively								*
+#****************************************************************************************

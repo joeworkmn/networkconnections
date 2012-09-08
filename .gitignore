@@ -1,2 +1,7 @@
 *.swp
 *.~
+
+test/
+doc/
+
+dhcpd.conf.portl0cac
