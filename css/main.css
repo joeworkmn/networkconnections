@@ -1,0 +1,17 @@
+.myPlugin {
+   /*position: relative;*/
+}
+
+.newlyConnected {
+   float: left;
+   padding-right: 100px;
+}
+
+.excludedHosts {
+   float: left;
+   padding-right: 100px;
+}
+
+.clear {
+   clear: both;
+}

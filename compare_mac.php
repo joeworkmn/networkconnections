@@ -11,37 +11,40 @@
  if (isset($_FILES['uploadedfile']['tmp_name'])) {
     $file = $_FILES['uploadedfile']['tmp_name'];
 
-    // Array of hosts from dhcpd.conf
-    $hosts = makeHostsArray($file); 
-
     $dbParams = new DB();
 
     $db = new PDO("mysql:host=$dbParams->dbhost;dbname=$dbParams->dbdefault", $dbParams->dbuser, $dbParams->dbpassword);
+
+    // Array of hosts from dhcpd.conf
+    $hosts = makeHostsArray($file); 
+
+    $excludedHosts = excludedHosts($hosts);
+
+    //die(var_dump($excludedHosts));
 
     // Array of rows from glpi_networkports.
     $hostPorts = fetchHostPorts($hosts);
 
     HTML::header('NetworkConnections', '', 'plugins', 'NetworkConnections');
 
+    echo "<head> <link rel='stylesheet' type='text/css' href='css/main.css'/> </head>";
+
+    echo "<div class='myPlugin'>";
+
     // PDO statement.
     $switchPorts = fetchSwitchPorts(); 
 
-    foreach ($hostPorts as $h) {
+    echo "<div class='newlyConnected'>";
 
-        // host networkport id.
-        $hostPortId = $h['id'];
+    makeConnections($hostPorts, $switchPorts);
 
-        // switch port row from GLPI.
-        $swPort = $switchPorts->fetch(PDO::FETCH_ASSOC);
+    echo "</div>";
 
-        // connect the host port to the switch port.
-        if (connect($hostPortId, $swPort['np_id'])) {
-           //echo $h['cname'] . " has been connected to port: " . $swPort['name'] . "<br /> <br />";
-           echo "<p>" . $h['cname'] . " has been connected to port: " . $swPort['name'] . "</p> <br />";
-        }
 
-    }
+    echo $excludedHosts;
 
+    echo "</div>";
+    echo "<div class='clear'></div>";
     HTML::footer();
  
  }
@@ -144,6 +147,8 @@ function fetchSwitchPorts()
    return $stmt;
 }
 
+
+
 /*
  * Connects a host network port to an available switch port
  * by inserting the pair of IDs into glpi_networkports_networkports.
@@ -158,6 +163,78 @@ function connect($hostPortId, $swPortId)
    $result = $stmt->execute( array('portId1' => $hostPortId, 'portId2' => $swPortId) );
 
    return $result;
+}
+
+
+
+/*
+ * Iterates through the hostports and uses connect() 
+ * to connect the host port to the next available switchport.
+ * Then echoes the resulting connection.
+ *
+ * @param $hostPorts Array; The host ports to connect.
+ * @param $switchPorts Array; The switch ports being connected to.
+ */
+function makeConnections($hostPorts, $switchPorts) 
+{
+    foreach ($hostPorts as $h) {
+
+        // host networkport id.
+        $hostPortId = $h['id'];
+
+        // switch port row from GLPI.
+        $swPort = $switchPorts->fetch(PDO::FETCH_ASSOC);
+
+        // connect the host port to the switch port.
+        if (connect($hostPortId, $swPort['np_id'])) {
+           //echo $h['cname'] . " has been connected to port: " . $swPort['name'] . "";
+           echo "<p>" . $h['cname'] . " has been connected to port: " . $swPort['name'] . "</p> <br />";
+        }
+
+    }
+
+}
+
+
+/*
+ * Creates a list of hosts which are in dhcpd.conf but not in GLPI
+ * and puts it in a <div>.
+ *
+ * @param $hosts Array; An array of hosts from dhcpd.conf.
+ *
+ * @returns String; A list of hosts in an HTML <div>.
+ *
+ */
+function excludedHosts($hosts)
+{
+   global $db;
+   
+   $excludedHosts = "<div class='excludedHosts'> <b><u> Hosts not in GLPI </u></b><br /><br />";
+   //$excludedHosts = "<div class='excludedHosts'> <b><u> Hosts not in GLPI </u></b>\n\n";
+
+   // All computers in GLPI.
+   $stmt = $db->query("SELECT name FROM glpi_computers");
+
+   // Foreach host in dhcpd.conf
+   foreach ($hosts as $h) {
+      $inDb = false;
+
+      while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+         if (trim(strtolower($h['name'])) === trim(strtolower($row['name']))) {
+            $inDb = true;
+         }
+      }
+
+      if (!$inDb) {
+         $excludedHosts .= $h['name'] . "<br /><br />";
+         //$excludedHosts .= $h['name'] . "\n\n";
+      }
+   }
+
+   $excludedHosts .= "</div>";
+
+   return $excludedHosts;
+
 }
 
 ?>

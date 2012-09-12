@@ -11,8 +11,9 @@ $dbParams = new DB();
 
 $db = new PDO("mysql:host=$dbParams->dbhost;dbname=$dbParams->dbdefault", $dbParams->dbuser, $dbParams->dbpassword);
 
-fetchSwitchPorts();
+//fetchSwitchPorts();
 
+echo excludedHosts();
 
 
 
@@ -92,5 +93,41 @@ function fetchHostPorts($hosts)
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
+
+
+function excludedHosts($hosts)
+{
+
+   global $db;
+   
+   //$excludedHosts = "<div class='excludedHosts'> <b><u> Hosts not in GLPI </u></b><br /><br />";
+   $excludedHosts = "<div class='excludedHosts'> <b><u> Hosts not in GLPI </u></b>\n\n";
+
+   // All computers in GLPI.
+   $stmt = $db->query("SELECT name FROM glpi_computers");
+
+   // Foreach host in dhcpd.conf
+   foreach ($hosts as $h) {
+      $inDb = false;
+
+      while($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+         if ($h['name'] === $row['name']) {
+            $inDb = true;
+         }
+      }
+
+      if (!$inDb) {
+         //$excludedHosts .= $h['name'] . "<br /><br />";
+         $excludedHosts .= $h['name'] . "\n\n";
+      }
+
+   
+   }
+
+   $excludedHosts .= "</div>";
+
+   return $excludedHosts;
+
+}
 
 ?>
