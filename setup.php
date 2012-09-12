@@ -1,27 +1,27 @@
 <?php
-   function plugin_init_dhcp() 
+   function plugin_init_NetworkConnections() 
    {
       global $PLUGIN_HOOKS, $CFG_GLPI, $LANGEXAMPLE,$LANG;
 
 
       $activeProfile = $_SESSION['glpiactiveprofile']['name'];
       if ($activeProfile == 'super-admin' || $activeProfile == 'admin') {
-         $PLUGIN_HOOKS['menu_entry']['dhcp'] = true;
-         //$PLUGIN_HOOKS['config_page']['dhcp']     = 'index.php';
-         //$PLUGIN_HOOKS['submenu_entry']['dhcp']['add'] = 'index.php';
-         //$PLUGIN_HOOKS["helpdesk_menu_entry"]['dhcp'] = true;
+         $PLUGIN_HOOKS['menu_entry']['NetworkConnections'] = true;
+         //$PLUGIN_HOOKS['config_page']['NetworkConnections']     = 'index.php';
+         //$PLUGIN_HOOKS['submenu_entry']['NetworkConnections']['add'] = 'index.php';
+         //$PLUGIN_HOOKS["helpdesk_menu_entry"]['NetworkConnections'] = true;
       }
    }
    
-   function plugin_version_dhcp()
+   function plugin_version_NetworkConnections()
    {
       return array( 
-         'name'    => 'dhcp',
+         'name'    => 'NetworkConnections',
          'version' => '0.1.0'
          );
    }
    
-   function plugin_dhcp_check_prerequisites()
+   function plugin_NetworkConnections_check_prerequisites()
    {
 	   if (GLPI_VERSION>=0.72){
 		   return true;
@@ -30,7 +30,7 @@
 	   }
    }
    
-   function plugin_dhcp_check_config()
+   function plugin_NetworkConnections_check_config()
    {
 	   return true;
    }

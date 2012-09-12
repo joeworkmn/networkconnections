@@ -21,7 +21,7 @@
     // Array of rows from glpi_networkports.
     $hostPorts = fetchHostPorts($hosts);
 
-    HTML::header('dhcp', '', 'plugins', 'dhcp');
+    HTML::header('NetworkConnections', '', 'plugins', 'NetworkConnections');
 
     // PDO statement.
     $switchPorts = fetchSwitchPorts(); 

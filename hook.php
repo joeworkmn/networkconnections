@@ -1,12 +1,12 @@
 <?php
 
-    function plugin_dhcp_install()
+    function plugin_NetworkConnections_install()
     {
        return true;
     
     }
 
-    function plugin_dhcp_uninstall()
+    function plugin_NetworkConnections_uninstall()
     {
        return true;
     }
