@@ -29,10 +29,6 @@ for ($i = 1; $i <= 254; $i++) {
 
    $portname = $i;
 
-   if ($i < 10) {
-      $portname = "0$i";
-   }
-
    $stmt->execute( array('portname' => "$portname") );
 }
 

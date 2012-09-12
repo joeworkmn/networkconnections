@@ -9,7 +9,12 @@
  require_once(GLPI_ROOT.'inc/includes.php');
 
  if (isset($_FILES['uploadedfile']['tmp_name'])) {
+    $uploadedfile = $_FILES['uploadedfile'];
+
+    // Used as the file resource.
     $file = $_FILES['uploadedfile']['tmp_name'];
+
+    //die(var_dump($_FILES['uploadedfile']));
 
     $dbParams = new DB();
 
@@ -18,18 +23,14 @@
     // Array of hosts from dhcpd.conf
     $hosts = makeHostsArray($file); 
 
-    $excludedHosts = excludedHosts($hosts);
-
-    //die(var_dump($excludedHosts));
-
-    // Array of rows from glpi_networkports.
-    $hostPorts = fetchHostPorts($hosts);
-
     HTML::header('NetworkConnections', '', 'plugins', 'NetworkConnections');
 
     echo "<head> <link rel='stylesheet' type='text/css' href='css/main.css'/> </head>";
 
     echo "<div class='myPlugin'>";
+
+    // Array of rows from glpi_networkports.
+    $hostPorts = fetchHostPorts($hosts);
 
     // PDO statement.
     $switchPorts = fetchSwitchPorts(); 
@@ -40,11 +41,14 @@
 
     echo "</div>";
 
+    logFileUpload($uploadedfile);
 
+    $excludedHosts = excludedHosts($hosts);
     echo $excludedHosts;
 
     echo "</div>";
     echo "<div class='clear'></div>";
+
     HTML::footer();
  
  }
@@ -103,7 +107,7 @@ function fetchHostPorts($hosts)
     //          JOIN glpi_networkports n ON c.id = n.items_id AND n.itemtype = 'Computer'
     //          WHERE n.mac IN(";
 
-    $sql = "SELECT c.name AS cname, n.id, n.mac, np_np.networkports_id_1 FROM glpi_computers c 
+    $sql = "SELECT c.name AS cname, n.id, n.mac, n.ip, np_np.networkports_id_1 FROM glpi_computers c 
               JOIN glpi_networkports n ON (c.id = n.items_id AND n.itemtype = 'Computer')
               LEFT JOIN glpi_networkports_networkports np_np ON (n.id = np_np.networkports_id_1)
               WHERE n.mac IN(";
@@ -133,7 +137,7 @@ function fetchHostPorts($hosts)
 /*
  * Returns AVAILABLE network ports (ones that aren't already connected to a host) of the fake switch.
  *
- * @return PDO statement object.
+ * @return array
  */
 function fetchSwitchPorts()
 {
@@ -144,7 +148,9 @@ function fetchSwitchPorts()
       LEFT JOIN glpi_networkports_networkports AS np_np ON (np.id = np_np.networkports_id_2)
       WHERE (ne.name = 'hccmwc fake switch' AND np_np.networkports_id_2 IS NULL)");
 
-   return $stmt;
+   $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+   return $rows;
 }
 
 
@@ -181,14 +187,26 @@ function makeConnections($hostPorts, $switchPorts)
 
         // host networkport id.
         $hostPortId = $h['id'];
+        $hostIp = $h['ip'];
+        $octets = explode('.', $hostIp);
 
-        // switch port row from GLPI.
-        $swPort = $switchPorts->fetch(PDO::FETCH_ASSOC);
+        //die(var_dump($octets));
 
-        // connect the host port to the switch port.
-        if (connect($hostPortId, $swPort['np_id'])) {
-           //echo $h['cname'] . " has been connected to port: " . $swPort['name'] . "";
-           echo "<p>" . $h['cname'] . " has been connected to port: " . $swPort['name'] . "</p> <br />";
+        foreach ($switchPorts as $sp) {
+           $swPortId = $sp['np_id'];
+
+           // if fourth octet of ip matches port name, then connect it.
+           if ($octets[3] === $sp['name']) {
+              
+              // connect the host port to the switch port.
+              if (connect($hostPortId, $swPortId)) {
+
+                 //echo $h['cname'] . " has been connected to port: " . $swPort['name'] . "";
+                 echo "<p>" . $h['cname'] . " has been connected to port: " . $sp['name'] . "</p> <br />";
+
+              }
+           }
+        
         }
 
     }
@@ -236,5 +254,44 @@ function excludedHosts($hosts)
    return $excludedHosts;
 
 }
+
+
+/*
+ * Inserts the uploaded filename into the database, or
+ * updates if already exists.
+ *
+ *
+ */
+function logFileUpload($file)
+{
+   global $db;
+   $filename = $file['name'];
+
+   // Bound value for filename.
+   $fileBinding = array('filename' => $filename);
+
+   // Check if file name is already in table.
+   $select = "SELECT name from glpi_plugin_networkconnections_uploadedfiles WHERE name = :filename";
+   $selStmt = $db->prepare($select);
+   $selStmt->execute($fileBinding);
+   $row = $selStmt->fetchAll();
+
+   // If not in table, insert.
+   if (empty($row)) {
+      $insert = "INSERT INTO glpi_plugin_networkconnections_uploadedfiles (name, upload_date)
+                 VALUES (:filename, NOW())";
+      $insStmt = $db->prepare($insert);
+      $insStmt->execute($fileBinding);
+   // else, update.
+   } else {
+      $update = "UPDATE glpi_plugin_networkconnections_uploadedfiles set upload_date = NOW() 
+                    WHERE name = :filename";
+      $updateStmt = $db->prepare($update);
+      $updateStmt->execute($fileBinding);
+   }
+
+}
+
+
 
 ?>

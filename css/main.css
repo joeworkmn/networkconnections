@@ -12,6 +12,15 @@
    padding-right: 100px;
 }
 
+.dhcpUpload {
+   float: left;
+}
+
+.prevFiles {
+   float: left;
+   padding-right: 100px;
+}
+
 .clear {
    clear: both;
 }
