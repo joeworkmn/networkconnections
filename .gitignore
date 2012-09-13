@@ -5,6 +5,6 @@ hello.txt
 
 test/
 doc/
-privates_files/*
+private_files/*
 
 dhcpd.conf.portl0cac
