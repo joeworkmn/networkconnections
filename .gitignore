@@ -1,6 +1,8 @@
 *.swp
 *.~
 
+hello.txt
+
 test/
 doc/
 privates_files/*
