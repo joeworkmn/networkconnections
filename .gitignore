@@ -3,6 +3,6 @@
 
 test/
 doc/
-privates_files/
+privates_files/*
 
 dhcpd.conf.portl0cac
